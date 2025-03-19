@@ -17,6 +17,9 @@ public class Electrician {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false,unique = true,length = 12)
+    private String aadhaarNumber;
+
     @OneToOne
     @JoinColumn(name = "userId", referencedColumnName = "id",unique = true)
     private User user;

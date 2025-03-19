@@ -6,13 +6,13 @@ spring:
     url: jdbc:mysql://localhost:3306/eServiceDb
     username: root
     password: AAaa@123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-      database-platform: org.hibernate.dialect.MySQLDialect
+#      database-platform: org.hibernate.dialect.MySQLDialect
 
   application:
     name: E-service

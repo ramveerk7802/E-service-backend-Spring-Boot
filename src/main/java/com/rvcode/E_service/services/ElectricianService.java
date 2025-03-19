@@ -5,6 +5,8 @@ import com.rvcode.E_service.exception.MyCustomException;
 import com.rvcode.E_service.repositories.ElectricianRepository;
 import org.springframework.stereotype.Service;
 
+
+
 @Service
 public class ElectricianService {
 
@@ -23,4 +25,14 @@ public class ElectricianService {
             throw new MyCustomException("Error on registered as electrician");
         }
     }
+
+    public void deleteById(Long id){
+        try {
+            electricianRepository.deleteById(id);
+        }catch (Exception e){
+            throw new MyCustomException("Error in deleting the Account !");
+        }
+    }
+
+
 }

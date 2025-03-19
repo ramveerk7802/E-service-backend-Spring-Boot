@@ -31,6 +31,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role; // CUSTOMER or ELECTRICIAN
 
+
+
     @Column(nullable = false)
     private String city;
 

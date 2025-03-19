@@ -45,6 +45,7 @@ public class UserService {
                 user.setRole(Role.ELECTRICIAN);
                 Electrician electrician = new Electrician();
                 electrician.setUser(user);
+                electrician.setAadhaarNumber(userDto.getAadhaarNumber());
                 user.setElectrician(electrician);
             }
             User saveduser = userRepository.save(user);
@@ -55,6 +56,23 @@ public class UserService {
     }
 
 
+    public boolean deleteAccountByEmail(String email){
+        try {
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if(optionalUser.isEmpty())
+                throw new MyCustomException("Failed to delete Account.");
+            User user = optionalUser.get();
+            if(user.getRole()==Role.ELECTRICIAN){
+                Electrician electrician = user.getElectrician();
+                if(electrician!=null)
+                    electricianService.deleteById(electrician.getId());
+            }
+            userRepository.deleteById(user.getId());
+            return true;
+        }catch (Exception e){
+            throw new MyCustomException("Failed to Delete Account, please try again.");
+        }
+    }
 
     public User findById(Long id){
         try{
@@ -64,7 +82,7 @@ public class UserService {
             return optionalUser.get();
 
         }catch (Exception e){
-            throw new MyCustomException("Bad Requesyt");
+            throw new MyCustomException("Bad Request");
         }
 
     }
