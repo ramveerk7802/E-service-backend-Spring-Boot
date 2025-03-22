@@ -52,10 +52,10 @@ public class AuthController {
         return new ResponseEntity<>(saved,HttpStatus.CREATED);
     }
 
-    @GetMapping("/{myId}")
-    public User findById(@PathVariable Long myId){
-        return userService.findById(myId);
-    }
+//    @GetMapping("/{myId}")
+//    public User findById(@PathVariable Long myId){
+//        return userService.findById(myId);
+//    }
 
 
 }

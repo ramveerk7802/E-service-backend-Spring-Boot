@@ -5,6 +5,7 @@ import com.rvcode.E_service.entities.Electrician;
 import com.rvcode.E_service.entities.User;
 import com.rvcode.E_service.enums.Role;
 import com.rvcode.E_service.exception.MyCustomException;
+import com.rvcode.E_service.repositories.ElectricianRepository;
 import com.rvcode.E_service.repositories.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ElectricianService electricianService;
+    private final ElectricianRepository electricianRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ElectricianService electricianService) {
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ElectricianRepository electricianRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.electricianService = electricianService;
+        this.electricianRepository = electricianRepository;
     }
 
     public User registerForUserOrElectrician(UserOrElectricianRegistrationDto userDto,Role role){
@@ -65,7 +67,7 @@ public class UserService {
             if(user.getRole()==Role.ELECTRICIAN){
                 Electrician electrician = user.getElectrician();
                 if(electrician!=null)
-                    electricianService.deleteById(electrician.getId());
+                    electricianRepository.deleteById(electrician.getId());
             }
             userRepository.deleteById(user.getId());
             return true;
@@ -74,17 +76,8 @@ public class UserService {
         }
     }
 
-    public User findById(Long id){
-        try{
-            Optional<User> optionalUser = userRepository.findById(id);
-            if(optionalUser.isEmpty())
-                throw new MyCustomException("User not Found with : "+id);
-            return optionalUser.get();
-
-        }catch (Exception e){
-            throw new MyCustomException("Bad Request");
-        }
-
+    public User updateAccount(String email){
+        return null;
     }
 
 

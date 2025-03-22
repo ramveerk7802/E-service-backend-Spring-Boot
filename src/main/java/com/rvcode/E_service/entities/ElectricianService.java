@@ -1,5 +1,6 @@
 package com.rvcode.E_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -36,9 +37,10 @@ public class ElectricianService {
 
     @ManyToOne
     @JoinColumn(name = "electrician_id", nullable = false)
+    @JsonIgnore
     private Electrician electrician;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String serviceName;
 
     @Column(nullable = false)
