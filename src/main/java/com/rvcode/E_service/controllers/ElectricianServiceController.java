@@ -61,4 +61,14 @@ public class ElectricianServiceController {
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to deletion");
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateById(@RequestParam Long id,@RequestBody NewServiceAddDto dto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(401).body("User not Authorized");
+        }
+        ElectricianService updated = myElectricianService.updateById(id,dto);
+        return new ResponseEntity<>(updated,HttpStatus.OK);
+    }
 }

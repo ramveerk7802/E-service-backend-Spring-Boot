@@ -1,6 +1,8 @@
 package com.rvcode.E_service.controllers;
 
 
+import com.rvcode.E_service.dtoObjects.UserResponseDto;
+import com.rvcode.E_service.entities.User;
 import com.rvcode.E_service.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -25,7 +28,21 @@ public class UserController {
     }
 
 
+    @GetMapping
+    public ResponseEntity<?> getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(401).body("User not Authorized");
+        }
+        String email = authentication.getName();
+        Optional<User> optionalUser = userService.findByEmail(email);
+        if(optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        User user = optionalUser.get();
 
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
 
     @DeleteMapping
     public ResponseEntity<?> deleteAccount() {

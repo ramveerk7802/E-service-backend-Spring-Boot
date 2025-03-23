@@ -69,5 +69,25 @@ public class MyElectricianService {
         }
     }
 
+    public ElectricianService updateById(Long id,NewServiceAddDto dto){
+        try {
+            Optional<ElectricianService> optionalElectricianService =myElectricianServiceRepository.findById(id);
+            if(optionalElectricianService.isEmpty())
+                throw new MyCustomException("Failed to fetch data");
+            ElectricianService myService = optionalElectricianService.get();
+            if(dto.getServiceName()!=null && !dto.getServiceName().isEmpty())
+                myService.setServiceName(dto.getServiceName());
+            if(dto.getBaseCharge()!=0.0)
+                myService.setBaseCharge(dto.getBaseCharge());
+            if(dto.getDescription()!=null && !dto.getDescription().isEmpty())
+                myService.setDescription(dto.getDescription());
+            ElectricianService updatedData= myElectricianServiceRepository.save(myService);
+            return updatedData;
+        }catch (Exception e){
+            throw new MyCustomException("Error on Updating the Service :-> "+e.getMessage());
+        }
+
+    }
+
 
 }

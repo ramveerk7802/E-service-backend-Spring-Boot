@@ -76,6 +76,14 @@ public class UserService {
         }
     }
 
+    public Optional<User> findByEmail(String email){
+        try {
+            return userRepository.findByEmail(email);
+        }catch (Exception e){
+            throw new MyCustomException("Error on fetching data of Authenticated user/Current user :-> "+e.getMessage());
+        }
+    }
+
     public User updateAccount(String email){
         return null;
     }
