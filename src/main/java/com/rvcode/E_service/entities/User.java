@@ -6,6 +6,9 @@ import com.rvcode.E_service.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "users")
@@ -41,6 +44,10 @@ public class User {
 
     @Column(nullable = false, length = 6)
     private String pinCode;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ServiceRequest> serviceRequestsList = new ArrayList<>();
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

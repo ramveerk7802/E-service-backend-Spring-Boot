@@ -2,7 +2,6 @@ package com.rvcode.E_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -17,14 +16,22 @@ public class Electrician {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,unique = true,length = 12)
+    @Column(nullable = false, unique = true, length = 12)
     private String aadhaarNumber;
 
     @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id",unique = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "electrician",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<ElectricianService> services = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "service_request_id")
+    private ServiceRequest serviceRequest;
 
+    @ManyToMany
+    @JoinTable(
+            name = "electrician_services",
+            joinColumns = @JoinColumn(name = "electrician_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_type_id")
+    )
+    private List<ServiceType> servicesTypeList = new ArrayList<>();
 }

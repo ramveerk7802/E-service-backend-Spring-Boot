@@ -1,5 +1,6 @@
 package com.rvcode.E_service.entities;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,6 +13,12 @@ public class ServiceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String serviceName; // e.g., "Fan Repair", "AC Repair"
+    @Column(nullable = false)
+    private String serviceName;  // Example: "Fan Repair", "AC Repair", etc.
+
+    @Column(nullable = false)
+    private Double baseCharge;
+
+    @Column(length = 255)
+    private String description;
 }

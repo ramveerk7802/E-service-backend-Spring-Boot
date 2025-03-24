@@ -41,8 +41,8 @@ public class UserService {
             user.setState(userDto.getState());
             user.setPinCode(userDto.getPinCode());
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            if(Role.USER==role)
-                user.setRole(Role.USER);
+            if(Role.CUSTOMER==role)
+                user.setRole(Role.CUSTOMER);
             else{
                 user.setRole(Role.ELECTRICIAN);
                 Electrician electrician = new Electrician();
