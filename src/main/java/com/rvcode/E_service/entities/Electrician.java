@@ -1,6 +1,5 @@
 package com.rvcode.E_service.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,15 +22,9 @@ public class Electrician {
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "service_request_id")
-    private ServiceRequest serviceRequest;
+    @OneToMany(mappedBy = "electrician", cascade = CascadeType.ALL)
+    private List<BookingRequest> bookingRequests = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "electrician_services",
-            joinColumns = @JoinColumn(name = "electrician_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_type_id")
-    )
-    private List<ServiceType> servicesTypeList = new ArrayList<>();
+    @OneToMany(mappedBy = "electrician", cascade = CascadeType.ALL)
+    private List<ServiceType> offeredServices = new ArrayList<>();
 }

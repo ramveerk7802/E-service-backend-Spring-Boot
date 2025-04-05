@@ -28,34 +28,7 @@ public class UserService {
         this.electricianRepository = electricianRepository;
     }
 
-    public User registerForUserOrElectrician(UserOrElectricianRegistrationDto userDto,Role role){
-        try {
-            if(userRepository.existsByEmail(userDto.getEmail())){
-                throw new MyCustomException("User email already registered.");
-            }
-            User user = new User();
-            user.setName(userDto.getName());
-            user.setEmail(userDto.getEmail());
-            user.setPhone(userDto.getPhone());
-            user.setCity(userDto.getCity());
-            user.setState(userDto.getState());
-            user.setPinCode(userDto.getPinCode());
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            if(Role.CUSTOMER==role)
-                user.setRole(Role.CUSTOMER);
-            else{
-                user.setRole(Role.ELECTRICIAN);
-                Electrician electrician = new Electrician();
-                electrician.setUser(user);
-                electrician.setAadhaarNumber(userDto.getAadhaarNumber());
-                user.setElectrician(electrician);
-            }
-            User saveduser = userRepository.save(user);
-            return saveduser;
-        }catch (Exception e){
-            throw new MyCustomException("Error on registration of user");
-        }
-    }
+
 
 
     public boolean deleteAccountByEmail(String email){
@@ -87,6 +60,8 @@ public class UserService {
     public User updateAccount(String email){
         return null;
     }
+
+
 
 
 }

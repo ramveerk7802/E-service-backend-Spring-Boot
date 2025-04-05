@@ -1,8 +1,12 @@
 package com.rvcode.E_service.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,4 +25,10 @@ public class ServiceType {
 
     @Column(length = 255)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "electrician_id")
+    @JsonIgnore
+    private Electrician electrician;
+
 }

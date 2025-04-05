@@ -48,26 +48,26 @@ public class ElectricianController {
 
     }
 
-//    @DeleteMapping
-//    public ResponseEntity<?> deleteServiceById(@RequestParam Long id){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication==null || !authentication.isAuthenticated()){
-//            return ResponseEntity.status(401).body("User not Authorized");
-//        }
-//        boolean result = electricianService.deleteById(id);
-//        if(result)
-//            return ResponseEntity.status(HttpStatus.OK).body("Deleted Successfully");
-//        else
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to deletion");
-//    }
+    @DeleteMapping
+    public ResponseEntity<?> deleteServiceTypeById(@RequestParam Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(401).body("User not Authorized");
+        }
+        boolean result = electricianService.deleteServiceTypeById(authentication.getName(),id);
+        if(result)
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted Successfully");
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to deletion");
+    }
 
-//    @PutMapping
-//    public ResponseEntity<?> updateById(@RequestParam Long id,@RequestBody ServiceTypeDto dto){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication==null || !authentication.isAuthenticated()){
-//            return ResponseEntity.status(401).body("User not Authorized");
-//        }
-//        ElectricianService updated = electricianService.updateById(id,dto);
-//        return new ResponseEntity<>(updated,HttpStatus.OK);
-//    }
+    @PutMapping
+    public ResponseEntity<?> updateById(@RequestParam Long id,@RequestBody ServiceTypeDto dto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(401).body("User not Authorized");
+        }
+        ServiceType updated = electricianService.updateServiceTypeById(authentication.getName(), id,dto);
+        return new ResponseEntity<>(updated,HttpStatus.OK);
+    }
 }

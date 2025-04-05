@@ -46,8 +46,7 @@ public class User {
     private String pinCode;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<ServiceRequest> serviceRequestsList = new ArrayList<>();
+    private List<BookingRequest> bookingRequestsList = new ArrayList<>();
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

@@ -16,7 +16,7 @@ public class AdditionalServiceCharge {
     @ManyToOne
     @JoinColumn(name = "service_request_id", nullable = false)
     @JsonIgnore
-    private ServiceRequest serviceRequest;  // Links additional charges to an existing request
+    private BookingRequest bookingRequest;  // Links additional charges to an existing request
 
     @Column(nullable = false)
     private String additionalServiceName; // Description like "Lamp Repair"
