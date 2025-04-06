@@ -2,10 +2,13 @@ package com.rvcode.E_service.services;
 
 
 import com.rvcode.E_service.dtoObjects.ServiceTypeDto;
+import com.rvcode.E_service.entities.BookingRequest;
 import com.rvcode.E_service.entities.Electrician;
 import com.rvcode.E_service.entities.ServiceType;
 import com.rvcode.E_service.entities.User;
+import com.rvcode.E_service.enums.BookingStatus;
 import com.rvcode.E_service.exception.MyCustomException;
+import com.rvcode.E_service.repositories.BookingRequestRepository;
 import com.rvcode.E_service.repositories.ElectricianRepository;
 import com.rvcode.E_service.repositories.ServiceTypeRepository;
 import com.rvcode.E_service.repositories.UserRepository;
@@ -23,11 +26,13 @@ public class ElectricianService {
     private final ElectricianRepository electricianRepository;
     private final UserRepository userRepository;
     private final ServiceTypeRepository serviceTypeRepository;
+    private final BookingRequestRepository bookingRequestRepository;
 
-    public ElectricianService(ElectricianRepository electricianRepository, UserRepository userRepository, ServiceTypeRepository serviceTypeRepository) {
+    public ElectricianService(ElectricianRepository electricianRepository, UserRepository userRepository, ServiceTypeRepository serviceTypeRepository, BookingRequestRepository bookingRequestRepository) {
         this.electricianRepository = electricianRepository;
         this.userRepository = userRepository;
         this.serviceTypeRepository = serviceTypeRepository;
+        this.bookingRequestRepository = bookingRequestRepository;
     }
 
 
@@ -172,7 +177,41 @@ public class ElectricianService {
     }
 
 
+    public List<BookingRequest> getAllBookingRequest(String email){
+        try {
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if(optionalUser.isEmpty())
+                throw new MyCustomException("Error : User not Found");
+            User user = optionalUser.get();
+            Electrician electrician = user.getElectrician();
+            if(electrician==null)
+                throw new MyCustomException("This User is not electrician");
+            List<BookingRequest> list = electrician.getBookingRequests();
+            return list;
+        }catch (Exception e){
+            log.error("Error getting All Booking Request -> "+ e.getMessage());
+            return null;
+        }
+
+    }
 
 
+    public BookingRequest updateBookingStatusById(Long id, String bookingStatus) {
+        try {
+            Optional<BookingRequest> optionalBookingRequest = bookingRequestRepository.findById(id);
+            if(optionalBookingRequest.isEmpty())
+                throw new MyCustomException("Not Found Booking Request with id : "+id);
+            BookingRequest myBookingRequest = optionalBookingRequest.get();
 
+            if(bookingStatus.equalsIgnoreCase(BookingStatus.CONFIRMED.name()))
+                myBookingRequest.setBookingStatus(BookingStatus.CONFIRMED);
+            if(bookingStatus.equalsIgnoreCase(BookingStatus.CANCELLED.name()))
+                myBookingRequest.setBookingStatus(BookingStatus.CANCELLED);
+            BookingRequest saved = bookingRequestRepository.save(myBookingRequest);
+            return saved;
+        }catch (Exception e){
+            log.error("Error on Booking status update");
+            return null;
+        }
+    }
 }

@@ -20,12 +20,6 @@ public class BookingRequestController {
     }
 
 
-    @GetMapping("/check-health")
-    public ResponseEntity<?> checkHealth(){
-        return new ResponseEntity<>("Request controller okk",HttpStatus.OK);
-    }
-
-
 
 
     @PostMapping("/create")
@@ -39,6 +33,7 @@ public class BookingRequestController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
 
     }
+
 
 
 }

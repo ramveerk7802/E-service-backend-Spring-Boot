@@ -39,7 +39,6 @@ public class BookingRequestService {
                 throw new MyCustomException("Electrician data is null");
             BookingRequest bookingRequest = new BookingRequest();
 
-
             bookingRequest.setServiceType(serviceType);
             bookingRequest.setElectrician(electrician);
             bookingRequest.setUser(user);

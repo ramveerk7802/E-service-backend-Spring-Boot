@@ -1,7 +1,9 @@
 package com.rvcode.E_service.controllers;
 
 
+import com.rvcode.E_service.dtoObjects.CancelBookingResponseDto;
 import com.rvcode.E_service.dtoObjects.UserResponseDto;
+import com.rvcode.E_service.entities.BookingRequest;
 import com.rvcode.E_service.entities.User;
 import com.rvcode.E_service.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,18 @@ public class UserController {
         User user = optionalUser.get();
 
         return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+    @PutMapping("/booking-request/cancel")
+    public ResponseEntity<?> cancelBookingRequestIfNotConfirm(@RequestParam Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication==null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(401).body("User not Authorized");
+        }
+        CancelBookingResponseDto responseDto = userService.cancelBookingRequestIfNotConfirm(id);
+        if(!responseDto.getStatus())
+            return new ResponseEntity<>(responseDto,HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(responseDto,HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping

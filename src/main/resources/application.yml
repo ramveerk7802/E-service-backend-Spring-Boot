@@ -1,6 +1,4 @@
 
-
-
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/eServiceDb
@@ -13,6 +11,9 @@ spring:
     hibernate:
       ddl-auto: update
 #      database-platform: org.hibernate.dialect.MySQLDialect
+  redis:
+    host: localhost
+    port: 6379
 
   application:
     name: E-service

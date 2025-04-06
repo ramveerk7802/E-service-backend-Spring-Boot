@@ -1,10 +1,14 @@
 package com.rvcode.E_service.services;
 
+import com.rvcode.E_service.dtoObjects.CancelBookingResponseDto;
 import com.rvcode.E_service.dtoObjects.UserOrElectricianRegistrationDto;
+import com.rvcode.E_service.entities.BookingRequest;
 import com.rvcode.E_service.entities.Electrician;
 import com.rvcode.E_service.entities.User;
+import com.rvcode.E_service.enums.BookingStatus;
 import com.rvcode.E_service.enums.Role;
 import com.rvcode.E_service.exception.MyCustomException;
+import com.rvcode.E_service.repositories.BookingRequestRepository;
 import com.rvcode.E_service.repositories.ElectricianRepository;
 import com.rvcode.E_service.repositories.UserRepository;
 
@@ -20,12 +24,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ElectricianRepository electricianRepository;
+    private final BookingRequestRepository bookingRequestRepository;
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ElectricianRepository electricianRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ElectricianRepository electricianRepository, BookingRequestRepository bookingRequestRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.electricianRepository = electricianRepository;
+        this.bookingRequestRepository = bookingRequestRepository;
     }
 
 
@@ -59,6 +65,23 @@ public class UserService {
 
     public User updateAccount(String email){
         return null;
+    }
+
+    public CancelBookingResponseDto cancelBookingRequestIfNotConfirm(Long id){
+
+        Optional<BookingRequest> optionalBookingRequest = bookingRequestRepository.findById(id);
+        if(optionalBookingRequest.isEmpty()){
+            throw new MyCustomException("Not Found Booking Request with id : "+id);
+        }
+        BookingRequest bookingRequest = optionalBookingRequest.get();
+        if(bookingRequest.getBookingStatus()== BookingStatus.CONFIRMED){
+            return new CancelBookingResponseDto(false,"Booking Already confirm by Electrician, so Not Cancel",bookingRequest);
+        }
+        bookingRequest.setBookingStatus(BookingStatus.CANCELLED);
+        BookingRequest saved = bookingRequestRepository.save(bookingRequest);
+        return new CancelBookingResponseDto(true,"Your Booking cancel successfully",saved);
+
+
     }
 
 
