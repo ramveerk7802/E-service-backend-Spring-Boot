@@ -74,10 +74,13 @@ public class UserService {
             throw new MyCustomException("Not Found Booking Request with id : "+id);
         }
         BookingRequest bookingRequest = optionalBookingRequest.get();
-        if(bookingRequest.getBookingStatus()== BookingStatus.CONFIRMED){
+        if(bookingRequest.getBookingStatus()== BookingStatus.APPROVED){
             return new CancelBookingResponseDto(false,"Booking Already confirm by Electrician, so Not Cancel",bookingRequest);
         }
-        bookingRequest.setBookingStatus(BookingStatus.CANCELLED);
+        else if(bookingRequest.getBookingStatus()==BookingStatus.PENDING){
+            bookingRequest.setBookingStatus(BookingStatus.CANCELLED);
+        }
+
         BookingRequest saved = bookingRequestRepository.save(bookingRequest);
         return new CancelBookingResponseDto(true,"Your Booking cancel successfully",saved);
 

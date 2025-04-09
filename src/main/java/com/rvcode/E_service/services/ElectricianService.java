@@ -8,6 +8,7 @@ import com.rvcode.E_service.entities.ServiceType;
 import com.rvcode.E_service.entities.User;
 import com.rvcode.E_service.enums.BookingStatus;
 import com.rvcode.E_service.exception.MyCustomException;
+import com.rvcode.E_service.exception.UserNotAuthorized;
 import com.rvcode.E_service.repositories.BookingRequestRepository;
 import com.rvcode.E_service.repositories.ElectricianRepository;
 import com.rvcode.E_service.repositories.ServiceTypeRepository;
@@ -141,6 +142,7 @@ public class ElectricianService {
 
             Optional<ServiceType> optionalServiceType = serviceTypeRepository.findById(id);
             if (optionalServiceType.isEmpty()) {
+//                throw new UserNotAuthorized("ServiceType  not exist with id :"+ id);
                 throw new MyCustomException("Service type with ID " + id + " not found.");
             }
 
@@ -203,10 +205,10 @@ public class ElectricianService {
                 throw new MyCustomException("Not Found Booking Request with id : "+id);
             BookingRequest myBookingRequest = optionalBookingRequest.get();
 
-            if(bookingStatus.equalsIgnoreCase(BookingStatus.CONFIRMED.name()))
-                myBookingRequest.setBookingStatus(BookingStatus.CONFIRMED);
-            if(bookingStatus.equalsIgnoreCase(BookingStatus.CANCELLED.name()))
-                myBookingRequest.setBookingStatus(BookingStatus.CANCELLED);
+            if(bookingStatus.equalsIgnoreCase(BookingStatus.APPROVED.name()))
+                myBookingRequest.setBookingStatus(BookingStatus.APPROVED);
+            else if(bookingStatus.equalsIgnoreCase(BookingStatus.REJECT.name()))
+                myBookingRequest.setBookingStatus(BookingStatus.REJECT);
             BookingRequest saved = bookingRequestRepository.save(myBookingRequest);
             return saved;
         }catch (Exception e){

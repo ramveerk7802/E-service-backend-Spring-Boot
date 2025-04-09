@@ -5,6 +5,7 @@ import com.rvcode.E_service.dtoObjects.CancelBookingResponseDto;
 import com.rvcode.E_service.dtoObjects.UserResponseDto;
 import com.rvcode.E_service.entities.BookingRequest;
 import com.rvcode.E_service.entities.User;
+import com.rvcode.E_service.exception.UserNotAuthorized;
 import com.rvcode.E_service.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication==null || !authentication.isAuthenticated()){
-            return ResponseEntity.status(401).body("User not Authorized");
+            throw new UserNotAuthorized("User Not authorized");
         }
         String email = authentication.getName();
         Optional<User> optionalUser = userService.findByEmail(email);
         if(optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new UserNotAuthorized("user not Authorized with email");
         }
         User user = optionalUser.get();
 
@@ -49,7 +50,7 @@ public class UserController {
     public ResponseEntity<?> cancelBookingRequestIfNotConfirm(@RequestParam Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication==null || !authentication.isAuthenticated()){
-            return ResponseEntity.status(401).body("User not Authorized");
+            throw new UserNotAuthorized("user not Authorized with email");
         }
         CancelBookingResponseDto responseDto = userService.cancelBookingRequestIfNotConfirm(id);
         if(!responseDto.getStatus())
